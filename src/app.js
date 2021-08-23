@@ -64,12 +64,14 @@ const galleryItems = [
   },
 ];
 
+// Рендерим разметку----------------------------
+
 const gallery = document.querySelector('.js-gallery');
 const galleryMarkup = creatGalleryMarkup (galleryItems);
 
 gallery.insertAdjacentHTML('beforeend', galleryMarkup);
 
-console.log(gallery);
+// console.log(gallery);
 
 function creatGalleryMarkup (galleryItems) {
   return galleryItems.map(({ preview, original, description }) => {
@@ -91,7 +93,16 @@ function creatGalleryMarkup (galleryItems) {
   }).join('');  
 }
 
+// Вешаем "слушателя"-------------------------------
 
+gallery.addEventListener('click', onGalleryClick)
+
+function onGalleryClick(evt) {
+  if (evt.target.classList.contains('.gallery__link') {
+    return 
+  }
+console.log(evt.target);
+}
 
 
 
