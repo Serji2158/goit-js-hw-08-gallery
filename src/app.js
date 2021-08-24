@@ -65,8 +65,17 @@ const galleryItems = [
 ];
 
 // Рендерим разметку----------------------------
+// const refs = {
+//   galleryList: document.querySelector('.js-gallery'),
+//   modalWindow: document.querySelector('.lightbox'),
+//   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
+// };
 
+
+
+const modalWindow = document.querySelector('.lightbox')
 const gallery = document.querySelector('.js-gallery');
+
 const galleryMarkup = creatGalleryMarkup (galleryItems);
 
 gallery.insertAdjacentHTML('beforeend', galleryMarkup);
@@ -98,11 +107,25 @@ function creatGalleryMarkup (galleryItems) {
 gallery.addEventListener('click', onGalleryClick)
 
 function onGalleryClick(evt) {
-  if (evt.target.classList.contains('.gallery__link') {
-    return 
+  if(!evt.target.classList.contains('gallery__item')) {
+    return
   }
-console.log(evt.target);
+  
+   return evt.target.dataset.source;
+};
+// console.log(onGalleryClick);
+
+
+
+
+
+
+function onOpenModal (evt) {
+  if(evt.target.classList.contains('gallery__item')){
+    modalWindow.classList.add('is-open');
+  }
 }
 
-
-
+// function onCloseModal () {
+//   modalWindow.classList.remove('is-open')
+// }
