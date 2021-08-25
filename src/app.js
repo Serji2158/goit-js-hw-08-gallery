@@ -77,9 +77,10 @@ const refs = {
 const galleryMarkup = creatGalleryMarkup(galleryItems);
 
 // console.log(galleryMarkup);
+let activeImage = 0;
 
 function creatGalleryMarkup (galleryItems) {
-  return galleryItems.map(({ preview, original, description }) => {
+  return galleryItems.map(({ preview, original, description}, index) => {
     return `
     <li class="gallery__item">
       <a
@@ -91,6 +92,7 @@ function creatGalleryMarkup (galleryItems) {
           src="${preview}"
           data-source="${original}"
           alt="${description}"
+          data-index="${index}"
         />
       </a>
     </li>
@@ -107,16 +109,43 @@ refs.modalWindowOverlay.addEventListener('click', onModalWindowOverlayClick);
 
 
 function onGalleryClick(evt) {
-  window.addEventListener('keydown', onEscKeyPress);
+  
+  
   evt.preventDefault();
    if(!evt.target.classList.contains('gallery__image')) {
     return
   };
-  
-  refs.openModalWindow.classList.add('is-open')
+
+  window.addEventListener('keydown', onEscKeyPress);
+  window.addEventListener('keyup', slideToggle);
+
+  refs.openModalWindow.classList.add('is-open');
   refs.modalWindow.src = evt.target.dataset.source;
+  activeImage = +evt.target.dataset.index;
 
  };
+
+const galleryItemsLength = galleryItems.length - 1;
+
+function slideToggle ({ code }) {
+
+  if(code === 'ArrowLeft') {
+    activeImage -=1;
+    if (activeImage < 0) {
+    activeImage = galleryItemsLength
+  }
+  } else if(code === 'ArrowRight') {
+    activeImage +=1;
+
+    if (activeImage > galleryItemsLength) {
+      activeImage = 0;
+    }
+  }
+
+  refs.modalWindow.src = galleryItems[activeImage].original;
+  
+}
+
 
 function onCloseModalBtnClick() {
   window.removeEventListener('keydown', onEscKeyPress);
