@@ -65,22 +65,18 @@ const galleryItems = [
 ];
 
 // Рендерим разметку----------------------------
-// const refs = {
-//   galleryList: document.querySelector('.js-gallery'),
-//   modalWindow: document.querySelector('.lightbox'),
-//   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
-// };
+const refs = {
+  gallery: document.querySelector('.js-gallery'),
+  openModalWindow: document.querySelector('.js-lightbox'),
+  closeModalBtn: document.querySelector('[data-action="close-lightbox"]'),
+  modalWindow: document.querySelector('.lightbox__image'),
+  currentActiveImage: document.querySelector('.is-open'),
+  modalWindowOverlay: document.querySelector('.lightbox__overlay'),
+};
 
+const galleryMarkup = creatGalleryMarkup(galleryItems);
 
-
-const modalWindow = document.querySelector('.lightbox')
-const gallery = document.querySelector('.js-gallery');
-
-const galleryMarkup = creatGalleryMarkup (galleryItems);
-
-gallery.insertAdjacentHTML('beforeend', galleryMarkup);
-
-// console.log(gallery);
+// console.log(galleryMarkup);
 
 function creatGalleryMarkup (galleryItems) {
   return galleryItems.map(({ preview, original, description }) => {
@@ -101,31 +97,45 @@ function creatGalleryMarkup (galleryItems) {
     `;
   }).join('');  
 }
+refs.gallery.insertAdjacentHTML('beforeend', galleryMarkup);
 
-// Вешаем "слушателя"-------------------------------
 
-gallery.addEventListener('click', onGalleryClick)
+refs.gallery.addEventListener('click', onGalleryClick);
+refs.closeModalBtn.addEventListener('click', onCloseModalBtnClick);
+refs.modalWindowOverlay.addEventListener('click', onModalWindowOverlayClick);
+
+
 
 function onGalleryClick(evt) {
-  if(!evt.target.classList.contains('gallery__item')) {
+  window.addEventListener('keydown', onEscKeyPress);
+  evt.preventDefault();
+   if(!evt.target.classList.contains('gallery__image')) {
+    return
+  };
+  
+  refs.openModalWindow.classList.add('is-open')
+  refs.modalWindow.src = evt.target.dataset.source;
+
+ };
+
+function onCloseModalBtnClick() {
+  window.removeEventListener('keydown', onEscKeyPress);
+  refs.openModalWindow.classList.remove('is-open');
+  refs.modalWindow.src = "";
+};
+
+function onModalWindowOverlayClick(event) {
+  if(event.target.classList.contains('.lightbox__overlay')){
     return
   }
-  
-   return evt.target.dataset.source;
+  refs.openModalWindow.classList.remove('is-open')
+  console.log(onModalWindowOverlayClick);
 };
-// console.log(onGalleryClick);
 
-
-
-
-
-
-function onOpenModal (evt) {
-  if(evt.target.classList.contains('gallery__item')){
-    modalWindow.classList.add('is-open');
+function onEscKeyPress(event){
+  if(event.code === 'Escape'){
+    refs.openModalWindow.classList.remove('is-open');
   }
-}
 
-// function onCloseModal () {
-//   modalWindow.classList.remove('is-open')
-// }
+  // console.log(onEscKeyPress);
+}
