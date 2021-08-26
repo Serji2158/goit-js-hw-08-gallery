@@ -64,19 +64,16 @@ const galleryItems = [
   },
 ];
 
-// Рендерим разметку----------------------------
 const refs = {
   gallery: document.querySelector('.js-gallery'),
   openModalWindow: document.querySelector('.js-lightbox'),
   closeModalBtn: document.querySelector('[data-action="close-lightbox"]'),
   modalWindow: document.querySelector('.lightbox__image'),
-  currentActiveImage: document.querySelector('.is-open'),
   modalWindowOverlay: document.querySelector('.lightbox__overlay'),
 };
 
 const galleryMarkup = creatGalleryMarkup(galleryItems);
 
-// console.log(galleryMarkup);
 let activeImage = 0;
 
 function creatGalleryMarkup (galleryItems) {
@@ -101,18 +98,14 @@ function creatGalleryMarkup (galleryItems) {
 }
 refs.gallery.insertAdjacentHTML('beforeend', galleryMarkup);
 
-
 refs.gallery.addEventListener('click', onGalleryClick);
 refs.closeModalBtn.addEventListener('click', onCloseModalBtnClick);
 refs.modalWindowOverlay.addEventListener('click', onModalWindowOverlayClick);
 
-
-
 function onGalleryClick(evt) {
-  
-  
   evt.preventDefault();
-   if(!evt.target.classList.contains('gallery__image')) {
+  
+  if(!evt.target.classList.contains('gallery__image')) {
     return
   };
 
@@ -128,9 +121,10 @@ function onGalleryClick(evt) {
 const galleryItemsLength = galleryItems.length - 1;
 
 function slideToggle ({ code }) {
-
+ 
   if(code === 'ArrowLeft') {
     activeImage -=1;
+    
     if (activeImage < 0) {
     activeImage = galleryItemsLength
   }
@@ -141,11 +135,8 @@ function slideToggle ({ code }) {
       activeImage = 0;
     }
   }
-
-  refs.modalWindow.src = galleryItems[activeImage].original;
-  
+  refs.modalWindow.src = galleryItems[activeImage].original;  
 }
-
 
 function onCloseModalBtnClick() {
   window.removeEventListener('keydown', onEscKeyPress);
@@ -157,14 +148,11 @@ function onModalWindowOverlayClick(event) {
   if(event.target.classList.contains('.lightbox__overlay')){
     return
   }
-  refs.openModalWindow.classList.remove('is-open')
-  console.log(onModalWindowOverlayClick);
+  refs.openModalWindow.classList.remove('is-open');
 };
 
 function onEscKeyPress(event){
   if(event.code === 'Escape'){
     refs.openModalWindow.classList.remove('is-open');
   }
-
-  // console.log(onEscKeyPress);
 }
